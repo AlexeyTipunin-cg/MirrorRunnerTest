@@ -12,9 +12,19 @@ public class NetworkPlayer : NetworkBehaviour
 {
     [SerializeField] private Color _collideColor;
     [SerializeField] private Renderer _renderer;
+    [SerializeField] private CharacterController _characterController;
+    [SerializeField] private Transform _camera;
+
+    [SerializeField] private float _movementSpeed = 100;
+    [SerializeField] private float _lookSpeed = 1000;
+    [SerializeField] private float _lookXLimit = 30;
+
+    private Vector2 _rotation;
 
     [SyncVar(hook = nameof(SetColor))]
     private Color _currentColor;
+    [SerializeField] private float _height = 1.2f;
+    [SerializeField] private Vector3 _offset = new Vector3(0, 2, -2);
 
     #region Start & Stop Callbacks
 
@@ -47,7 +57,10 @@ public class NetworkPlayer : NetworkBehaviour
     /// Called when the local player object has been set up.
     /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
     /// </summary>
-    public override void OnStartLocalPlayer() { }
+    public override void OnStartLocalPlayer()
+    {
+            _camera.gameObject.SetActive(true);
+    }
 
     /// <summary>
     /// Called when the local player object is being stopped.
@@ -89,15 +102,41 @@ public class NetworkPlayer : NetworkBehaviour
         _currentColor = _collideColor;
     }
 
+    [Command]
+    private void MoveCharacter(Vector3 pos)
+    {
+        _characterController.Move(pos);
+    }
+
     [ClientCallback]
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (isLocalPlayer)
         {
-            if (isOwned)
+            float x = Input.GetAxis("Horizontal") * _movementSpeed * Time.deltaTime;
+            float y = Input.GetAxis("Vertical") * _movementSpeed * Time.deltaTime;
+
+            Vector3 movement = (transform.right * x) + (transform.forward * y);
+            MoveCharacter(movement);
+
+
+            _rotation.y += Input.GetAxis("Mouse X") * _lookSpeed * Time.deltaTime;
+            _rotation.x += -Input.GetAxis("Mouse Y") * _lookSpeed * Time.deltaTime;
+            _rotation.x = Mathf.Clamp(_rotation.x, -_lookXLimit, _lookXLimit);
+            _camera.localRotation = Quaternion.Euler(_rotation.x, 0, 0);
+            transform.eulerAngles = new Vector2(0, _rotation.y);
+
+
+
+            //Vector3 pos = transform.transform.position + _offset;
+            //_camera.position = pos;
+
+            if (Input.GetMouseButtonDown(0))
             {
                 ChangeColor();
+
             }
         }
+
     }
 }

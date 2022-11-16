@@ -56,31 +56,31 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Utils.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\StandAlone\ClientSslHelper.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\Webgl\SimpleWebJSLib.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Message.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\BufferPool.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\SimpleWebTransport.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Connection.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\StandAlone\WebSocketClientStandAlone.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Server\WebSocketServer.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\Webgl\WebSocketClientWebGl.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\MessageProcessor.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\ReceiveLoop.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\SslConfigLoader.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\SendLoop.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\StandAlone\ClientHandshake.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Constants.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\ReadHelper.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Server\ServerSslHelper.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Utils.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\StandAlone\ClientHandshake.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\Server\SimpleWebServer.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\EventType.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Log.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\Server\ServerHandshake.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\StandAlone\ClientSslHelper.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\BufferPool.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\MessageProcessor.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\SendLoop.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\SimpleWebTransport.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Connection.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\SslConfigLoader.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\SimpleWebClient.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\TcpConfig.cs" />
     <Compile Include="Assets\Mirror\Transports\SimpleWeb\AssemblyInfo.cs" />
-    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Server\ServerSslHelper.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\StandAlone\WebSocketClientStandAlone.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Server\WebSocketServer.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\ReceiveLoop.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Client\Webgl\SimpleWebJSLib.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Constants.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\Log.cs" />
+    <Compile Include="Assets\Mirror\Transports\SimpleWeb\Common\TcpConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Mirror\Transports\SimpleWeb\SimpleWebTransport.asmdef" />
@@ -342,8 +342,14 @@
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.13f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.CecilX.Rocks">
+      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.17.6\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Pdb">
+      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@1.17.6\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
@@ -353,6 +359,9 @@
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX">
+      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Mdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
@@ -372,26 +381,17 @@
     <Reference Include="Unity.Burst.Cecil">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="log4netPlastic">
-      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.17.6\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="log4netPlastic">
+      <HintPath>Library\PackageCache\com.unity.collab-proxy@1.17.6\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.7.8\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX.Rocks">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX.Pdb">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll</HintPath>
     </Reference>
     <Reference Include="Mono.CecilX.Mdb">
       <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Mdb.dll</HintPath>

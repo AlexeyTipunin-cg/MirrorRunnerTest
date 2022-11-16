@@ -56,9 +56,11 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Mirror\Transports\KCP\MirrorTransport\KcpTransport.cs" />
     <Compile Include="Assets\Mirror\Transports\Latency\LatencySimulation.cs" />
     <Compile Include="Assets\Mirror\Transports\Telepathy\TelepathyTransport.cs" />
+    <Compile Include="Assets\Scripts\NetworkPlayer.cs" />
+    <Compile Include="Assets\Scripts\GameNetworkManager.cs" />
+    <Compile Include="Assets\Mirror\Transports\KCP\MirrorTransport\KcpTransport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll" />
@@ -325,8 +327,17 @@
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.13f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.CecilX.Rocks">
+      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX.Pdb">
+      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.CecilX">
+      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Mdb">
       <HintPath>Library\PackageCache\com.unity.burst@1.7.3\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
@@ -345,15 +356,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX.Rocks">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Rocks.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX.Pdb">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.CecilX">
-      <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.dll</HintPath>
     </Reference>
     <Reference Include="Mono.CecilX.Mdb">
       <HintPath>Assets\Mirror\Plugins\Mono.Cecil\Mono.CecilX.Mdb.dll</HintPath>
@@ -849,25 +851,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Mirror.csproj">
+      <Project>{4D415BF9-BB8C-53B8-4E15-80D7A9E5DD7E}</Project>
+      <Name>Mirror</Name>
+    </ProjectReference>
     <ProjectReference Include="kcp2k.csproj">
       <Project>{2DF8D7B3-A0F6-5F56-C8B7-650F86F773C0}</Project>
       <Name>kcp2k</Name>
     </ProjectReference>
-    <ProjectReference Include="Mirror.Editor.csproj">
-      <Project>{01099EC3-31D6-7B66-8A43-A945066A0A5C}</Project>
-      <Name>Mirror.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="where-allocations.csproj">
-      <Project>{5EC89A99-C356-1EFD-83B0-5AC24ACDB948}</Project>
-      <Name>where-allocations</Name>
-    </ProjectReference>
-    <ProjectReference Include="Telepathy.csproj">
-      <Project>{BA55D10F-D90F-C749-229A-0BE3AE7EE390}</Project>
-      <Name>Telepathy</Name>
-    </ProjectReference>
-    <ProjectReference Include="Mirror.Components.csproj">
-      <Project>{C17F594F-74F2-B371-1A18-0CCCA12CFA66}</Project>
-      <Name>Mirror.Components</Name>
+    <ProjectReference Include="MiddlewareTransport.csproj">
+      <Project>{5A71E1C5-1F4D-CDB2-6AE5-B0EE97A5BDCB}</Project>
+      <Name>MiddlewareTransport</Name>
     </ProjectReference>
     <ProjectReference Include="Mirror.Examples.csproj">
       <Project>{59D2A45E-EFAB-DC31-767C-4BFDFDA3D323}</Project>
@@ -877,9 +871,9 @@
       <Project>{2FB3870C-C423-2939-7122-19B9502A480F}</Project>
       <Name>MultiplexTransport</Name>
     </ProjectReference>
-    <ProjectReference Include="MiddlewareTransport.csproj">
-      <Project>{5A71E1C5-1F4D-CDB2-6AE5-B0EE97A5BDCB}</Project>
-      <Name>MiddlewareTransport</Name>
+    <ProjectReference Include="Mirror.Editor.csproj">
+      <Project>{01099EC3-31D6-7B66-8A43-A945066A0A5C}</Project>
+      <Name>Mirror.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Mirror.CompilerSymbols.csproj">
       <Project>{4CCF22EB-9E4C-3B93-24B7-2D4584698A44}</Project>
@@ -889,13 +883,21 @@
       <Project>{838D5AC0-0FF8-22B8-3F07-0345307F110D}</Project>
       <Name>Mirror.Authenticators</Name>
     </ProjectReference>
-    <ProjectReference Include="Mirror.csproj">
-      <Project>{4D415BF9-BB8C-53B8-4E15-80D7A9E5DD7E}</Project>
-      <Name>Mirror</Name>
+    <ProjectReference Include="Telepathy.csproj">
+      <Project>{BA55D10F-D90F-C749-229A-0BE3AE7EE390}</Project>
+      <Name>Telepathy</Name>
+    </ProjectReference>
+    <ProjectReference Include="where-allocations.csproj">
+      <Project>{5EC89A99-C356-1EFD-83B0-5AC24ACDB948}</Project>
+      <Name>where-allocations</Name>
     </ProjectReference>
     <ProjectReference Include="SimpleWebTransport.csproj">
       <Project>{B4075BED-875E-7F76-F8BC-632B73447008}</Project>
       <Name>SimpleWebTransport</Name>
+    </ProjectReference>
+    <ProjectReference Include="Mirror.Components.csproj">
+      <Project>{C17F594F-74F2-B371-1A18-0CCCA12CFA66}</Project>
+      <Name>Mirror.Components</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

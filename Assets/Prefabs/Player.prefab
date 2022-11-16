@@ -202,6 +202,13 @@ MonoBehaviour:
   syncInterval: 0.1
   _collideColor: {r: 1, g: 0, b: 0, a: 0}
   _renderer: {fileID: 8422128184749369873}
+  _characterController: {fileID: 0}
+  _camera: {fileID: 0}
+  _movementSpeed: 100
+  _lookSpeed: 1000
+  _lookXLimit: 30
+  _height: 1.2
+  _offset: {x: 0, y: 2, z: -2}
 --- !u!114 &8918888637029831949
 MonoBehaviour:
   m_ObjectHideFlags: 0
