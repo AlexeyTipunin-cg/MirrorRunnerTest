@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 5748731484578730159}
   - component: {fileID: 8454572858974062499}
   - component: {fileID: 4067134678673138843}
+  - component: {fileID: 6303318699083605896}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -260,6 +261,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   player: {fileID: 8763674594290190617}
+  _score: {fileID: 6303318699083605896}
 --- !u!114 &8454572858974062499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,9 +293,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2274adba9e12f67478acf6b4b12d9efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
   _lookSpeed: 1000
   _lookXLimit: 30
   _camera: {fileID: 3803385174547960600}
+--- !u!114 &6303318699083605896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4516333727313271205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3793e618f47e6ea4fbbff20bc08eb0d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1001 &3648190349754775549
 PrefabInstance:
   m_ObjectHideFlags: 0

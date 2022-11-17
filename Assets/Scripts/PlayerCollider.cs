@@ -4,6 +4,7 @@ using Mirror;
 public class PlayerCollider : NetworkBehaviour
 {
     [SerializeField] private NetworkPlayer player;
+    [SerializeField] private Score _score;
 
     [ServerCallback]
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -15,6 +16,7 @@ public class PlayerCollider : NetworkBehaviour
                 if (!enemy.isImmune)
                 {
                     enemy.ChangeColorOnCollision();
+                    _score.ServerGivePoints(1);
                 }
             }
         }
