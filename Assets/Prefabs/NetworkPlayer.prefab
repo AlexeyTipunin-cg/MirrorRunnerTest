@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 8454572858974062499}
   - component: {fileID: 4067134678673138843}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: NetworkPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
