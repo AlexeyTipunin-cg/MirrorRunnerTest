@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mirror;
+using System.Collections;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/guides/networkbehaviour
@@ -10,21 +11,23 @@ using Mirror;
 
 public class NetworkPlayer : NetworkBehaviour
 {
-    [SerializeField] private Color _collideColor;
     [SerializeField] private Renderer _renderer;
     [SerializeField] private CharacterController _characterController;
     [SerializeField] private Transform _camera;
 
-    [SerializeField] private float _movementSpeed = 100;
+    [SerializeField] private float _movementSpeed = 50;
     [SerializeField] private float _lookSpeed = 1000;
     [SerializeField] private float _lookXLimit = 30;
+    [SerializeField] private float _dashDistance;
+
+    [SerializeField] private Vector3 _offset = new Vector3(0, 2, -2);
+
+    [SyncVar]
+    private bool _isDash;
+
 
     private Vector2 _rotation;
-
-    [SyncVar(hook = nameof(SetColor))]
-    private Color _currentColor;
-    [SerializeField] private float _height = 1.2f;
-    [SerializeField] private Vector3 _offset = new Vector3(0, 2, -2);
+    public bool isDash => _isDash;
 
     #region Start & Stop Callbacks
 
@@ -59,7 +62,7 @@ public class NetworkPlayer : NetworkBehaviour
     /// </summary>
     public override void OnStartLocalPlayer()
     {
-            _camera.gameObject.SetActive(true);
+        _camera.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -83,60 +86,56 @@ public class NetworkPlayer : NetworkBehaviour
 
     #endregion
 
-    private void SetColor(Color oldColor, Color newColor)
-    {
-        _renderer.material.SetColor("_BaseColor", newColor);
-    }
-
-    [Command]
-    private void ChangeColor()
-    {
-        _currentColor = _collideColor;
-
-        //ServerChangeColor();
-    }
-
-    [Server]
-    private void ServerChangeColor()
-    {
-        _currentColor = _collideColor;
-    }
-
     [Command]
     private void MoveCharacter(Vector3 pos)
     {
         _characterController.Move(pos);
     }
 
+
     [ClientCallback]
     private void Update()
     {
+        if (ApplicationController.blockInput) return;
+
         if (isLocalPlayer)
         {
-            float x = Input.GetAxis("Horizontal") * _movementSpeed * Time.deltaTime;
-            float y = Input.GetAxis("Vertical") * _movementSpeed * Time.deltaTime;
-
-            Vector3 movement = (transform.right * x) + (transform.forward * y);
-            MoveCharacter(movement);
-
-
-            _rotation.y += Input.GetAxis("Mouse X") * _lookSpeed * Time.deltaTime;
-            _rotation.x += -Input.GetAxis("Mouse Y") * _lookSpeed * Time.deltaTime;
-            _rotation.x = Mathf.Clamp(_rotation.x, -_lookXLimit, _lookXLimit);
-            _camera.localRotation = Quaternion.Euler(_rotation.x, 0, 0);
-            transform.eulerAngles = new Vector2(0, _rotation.y);
-
-
-
-            //Vector3 pos = transform.transform.position + _offset;
-            //_camera.position = pos;
-
-            if (Input.GetMouseButtonDown(0))
+            if (_isDash)
             {
-                ChangeColor();
+                float dashSpeed = _dashDistance / 0.5f;
+                Vector3 dashMovement = transform.forward * dashSpeed * Time.deltaTime;
+                MoveCharacter(dashMovement);
+            }
 
+            if (!_isDash)
+            {
+                float x = Input.GetAxis("Horizontal") * _movementSpeed * Time.deltaTime;
+                float y = Input.GetAxis("Vertical") * _movementSpeed * Time.deltaTime;
+
+                Vector3 movement = (transform.right * x) + (transform.forward * y);
+                MoveCharacter(movement);
+
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    LaunchTimer();
+                }
             }
         }
 
+    }
+
+    [Command]
+    private void LaunchTimer()
+    {
+        _isDash = true;
+        StartCoroutine(Timer());
+    }
+
+    [ServerCallback]
+    private IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(0.3f);
+        _isDash = false;
     }
 }
