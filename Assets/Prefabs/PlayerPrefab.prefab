@@ -315,6 +315,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _winScore: 3
+  _timeForNextBattle: 5
 --- !u!114 &5320945628367293861
 MonoBehaviour:
   m_ObjectHideFlags: 0
