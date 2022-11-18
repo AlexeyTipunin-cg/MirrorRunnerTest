@@ -1,2 +1,1 @@
-# MirrorRunnerTest
-Run and hit the opponent
+Alexey Tipunin
