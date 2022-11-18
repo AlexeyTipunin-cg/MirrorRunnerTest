@@ -12,8 +12,6 @@ public class PlayerModelController : NetworkBehaviour
 
     [SerializeField] private SkinnedMeshRenderer[] _renderers;
     [SerializeField] private Animator _animator;
-
-    #region Client
     public void ChangeColor(Color newColor)
     {
         for (int i = 0; i < _renderers.Length; i++)
@@ -21,21 +19,16 @@ public class PlayerModelController : NetworkBehaviour
             _renderers[i].material.SetColor(_baseColorId, newColor);
         }
     }
-    #endregion
 
-    #region Server
-    [Command]
-    public void CmdRunAnimation(float movementSpeed)
+    public void ClientRunAnimation(float movementSpeed)
     {
         _animator.SetFloat(_speedId, 1);
         _animator.SetFloat(_speedMulId, movementSpeed / 4);
     }
 
-    [Command]
-    public void CmdIdleAnimation()
+    public void ClientIdleAnimation()
     {
         _animator.SetFloat(_speedId, 0);
         _animator.SetFloat(_speedMulId, 1);
     }
-    #endregion
 }

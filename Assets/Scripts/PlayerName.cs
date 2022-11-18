@@ -1,12 +1,9 @@
 using Mirror;
-using UnityEngine;
 
-public class RoomPlayer : NetworkRoomPlayer
+
+public class PlayerName : NetworkBehaviour
 {
-    [SyncVar]
-    [SerializeField]
     private string _name;
-    public string playerName => _name;
 
     [Command]
     public void CommandSetName(string name)

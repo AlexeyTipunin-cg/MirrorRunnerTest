@@ -1,6 +1,8 @@
 using UnityEngine;
 using Mirror;
 using System.Collections;
+using System.Linq;
+
 public class PlayerMovementController : NetworkBehaviour
 {
     [SerializeField] private CharacterController _characterController;
@@ -16,7 +18,7 @@ public class PlayerMovementController : NetworkBehaviour
 
     [SyncVar]
     private bool _isDash;
-    private const float  Y_POS = 0.5f;
+    private const float Y_POS = 0.5f;
 
 
     private Vector2 _rotation;
@@ -29,7 +31,11 @@ public class PlayerMovementController : NetworkBehaviour
     /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
     /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
     /// </summary>
-    public override void OnStartServer() { }
+    public override void OnStartServer()
+    {
+        var currentPlayerRoom = (NetworkManager.singleton as LobbyManager).roomSlots.First(slot => slot.connectionToClient.connectionId == connectionToClient.connectionId) as RoomPlayer;
+        connectionToClient.identity.name = currentPlayerRoom.playerName;
+    }
 
     /// <summary>
     /// Invoked on the server when the object is unspawned
@@ -77,6 +83,7 @@ public class PlayerMovementController : NetworkBehaviour
     /// </summary>
     public override void OnStopAuthority() { }
 
+
     #endregion
 
     #region Client
@@ -96,7 +103,7 @@ public class PlayerMovementController : NetworkBehaviour
             float dashSpeed = _dashDistance / _dashTime;
             Vector3 dashMovement = transform.forward * dashSpeed * Time.deltaTime;
             CmdMoveCharacter(dashMovement);
-            _changeModelColor.CmdRunAnimation(dashSpeed);
+            _changeModelColor.ClientRunAnimation(dashSpeed);
         }
 
         if (!_isDash)
@@ -104,11 +111,16 @@ public class PlayerMovementController : NetworkBehaviour
             float x = Input.GetAxis("Horizontal") * _movementSpeed * Time.deltaTime;
             float y = Input.GetAxis("Vertical") * _movementSpeed * Time.deltaTime;
 
-            _rotation.y += Input.GetAxis("Mouse X") * _lookSpeed * Time.deltaTime;
+            float rotY = Input.GetAxis("Mouse X") * _lookSpeed * Time.deltaTime;
+            if (rotY != 0)
+            {
+                _rotation.y += Input.GetAxis("Mouse X") * _lookSpeed * Time.deltaTime;
+                Vector3 rotation = new Vector3(0, _rotation.y, 0);
+                CmdRotateCharacter(rotation);      
+            }
+
             _rotation.x -= Input.GetAxis("Mouse Y") * _lookSpeed * Time.deltaTime;
             _rotation.x = Mathf.Clamp(_rotation.x, -_lookXLimit, _lookXLimit);
-
-            transform.eulerAngles = new Vector3(0, _rotation.y, 0);
 
             Vector3 movement = (transform.right * x) + (transform.forward * y);
 
@@ -118,12 +130,12 @@ public class PlayerMovementController : NetworkBehaviour
             }
             else if (movement == Vector3.zero)
             {
-                _changeModelColor.CmdIdleAnimation();
+                _changeModelColor.ClientIdleAnimation();
             }
             else
             {
                 CmdMoveCharacter(movement);
-                _changeModelColor.CmdRunAnimation(_movementSpeed);
+                _changeModelColor.ClientRunAnimation(_movementSpeed);
             }
         }
 
@@ -151,6 +163,12 @@ public class PlayerMovementController : NetworkBehaviour
     {
         _characterController.Move(pos);
         transform.position = new Vector3(transform.position.x, Y_POS, transform.position.z);
+    }
+
+    [Command]
+    private void CmdRotateCharacter(Vector3 rotation)
+    {
+        transform.eulerAngles = rotation;
     }
 
     [ServerCallback]

@@ -13,7 +13,8 @@ using System.Collections;
 
 public class ScoreController : NetworkBehaviour
 {
-    [SerializeField] private int _winScore; 
+    [SerializeField] private int _winScore;
+    [SerializeField] private float _timeForNextBattle = 5f;
 
     [SyncVar(hook = nameof(ClientOnScoreUpdate))]
     private int _score;
@@ -40,7 +41,7 @@ public class ScoreController : NetworkBehaviour
 
     public IEnumerator ResetGame()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(_timeForNextBattle);
         NetworkManager.singleton.ServerChangeScene("BattleScene");
     }
 
@@ -55,7 +56,6 @@ public class ScoreController : NetworkBehaviour
     private void GameOver(string name)
     {
         clientOnGameOver?.Invoke(name);
-        NetworkClient.Ready();
     }
 
 
