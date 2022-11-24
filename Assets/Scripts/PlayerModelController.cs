@@ -4,11 +4,8 @@ using UnityEngine;
 public class PlayerModelController : NetworkBehaviour
 {
     private int _baseColorId = Shader.PropertyToID("_BaseColor");
-    //private int _speedId = Animator.StringToHash("Speed");
-    //private int _speedMulId = Animator.StringToHash("SpeedMultiplier");
-
-    private const string _speedId = "Speed";
-    private const string _speedMulId = "SpeedMultiplier";
+    private int _speedId = Animator.StringToHash("Speed");
+    private int _speedMulId = Animator.StringToHash("SpeedMultiplier");
 
     [SerializeField] private SkinnedMeshRenderer[] _renderers;
     [SerializeField] private Animator _animator;
